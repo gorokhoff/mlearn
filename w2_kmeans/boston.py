@@ -10,7 +10,7 @@ from sklearn.datasets import load_boston
 from sklearn import cross_validation
 boston = load_boston()
 X, y = boston.data, boston.target
-X_scaled = preprocessing.scale(X)
+X_scaled = preprocessing.scale(X,axis=0)
 from sklearn.cross_validation import KFold
 kf = KFold(506, n_folds=5, shuffle=True, random_state = 42)
 
@@ -28,10 +28,10 @@ while i < 200:
     ps = sizes[i]
     clr = KNeighborsRegressor(n_neighbors=5, weights='distance', p=ps)
     scores = cross_validation.cross_val_score(clr, X_scaled, y, cv=kf, scoring = 'mean_squared_error')
-    m = abs(scores.mean())
+    m = scores.mean()
     
     lst.append([i,m])  
-    if m > m1: 
+    if m < m1: 
         m1 = m 
         index = i
         p = ps
